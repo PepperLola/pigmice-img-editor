@@ -176,79 +176,6 @@
                         gridBuffer[y][x] = c;
                     }
                     break;
-                // case 'ellipse':
-                //     gridBuffer = grid.map(row => row.slice());
-                //     let fill = false;
-                //     let xb, yb, xc, yc = 0;
-                //     yb = yc = (shapeStartY + y) / 2;
-                //     let qb = (shapeStartY < y) ? (y - shapeStartY) : (shapeStartY - y);
-                //     let qy = qb;
-                //     let dy = qb / 2;
-                //     if (qb % 2 != 0)
-                //         yc ++;
-
-                //     xb = xc = (shapeStartX + x) / 2;
-                //     let qa = (shapeStartX < x) ? (x - shapeStartX) : (shapeStartX - x);
-                //     let qx = qa % 2;
-                //     let dx = 0;
-                //     let qt = qa*qa+qb*qb-2*qa*qa*qb;
-                //     if (qx != 0) {
-                //         xc ++;
-                //         qt += 3*qb*qb;
-                //     }
-
-                //     let c = e.shiftKey ? secondaryColor : primaryColor;
-                //     while (qy >= 0 && qx <= qa) {
-                //         console.log("IN WHILE")
-                //         if (!fill) {
-                //             gridBuffer[yb-dy][xb-dx] = c;
-                //             if (dx != 0 || xb != xc) {
-                //                 gridBuffer[yb-dy][xc+dx] = c;
-                //                 if (dy != 0 || yb != yc)
-                //                     gridBuffer[yc+dy][xc+dx] = c;
-                //             }
-                //             if (dy != 0 || yb != yc) {
-                //                 gridBuffer[yc+dy][xb-dx] = c;
-                //             }
-                //         }
-                //         if (qt + 2*qb*qb*qx + 3*qb*qb <= 0 ||
-                //             qt + 2*qa*qa*qy - qa*qa <= 0) {
-                //                 qt += 8*qb*qb + 4*qb*qb*qx;
-                //                 dx ++;
-                //                 qx += 2;
-                //         } else if (qt - 2*qa*qa*qy + 3*qa*qa > 0) {
-                //             if (fill) {
-                //                 for (let i = xb-dx; i <= xc+dx; i++) {
-                //                     gridBuffer[yc+dy][i] = c;
-                //                 }
-                //                 if (dy != 0 || yb != yc) {
-                //                     for (let i = xb-dx; i <= xc+dx; i++) {
-                //                         gridBuffer[yb-dy][i] = c;
-                //                     }
-                //                 }
-                //             }
-                //             qt += 8*qa*qa - 4*qa*qa*qy;
-                //             dy --;
-                //             qy -= 2;
-                //         } else {
-                //             if (fill) {
-                //                 for (let i = xb-dx; i <= xc+dx; i++) {
-                //                     gridBuffer[yc+dy][i] = c;
-                //                 }
-                //                 if (dy != 0 || yb != yc) {
-                //                     for (let i = xb-dx; i <= xc+dx; i++) {
-                //                         gridBuffer[yb-dy][i] = c;
-                //                     }
-                //                 }
-                //             }
-                //             qt += 8*qb*qb + 4*qb*qb*qx + 8*qa*qa - 4*qa*qa*qy;
-                //             dx ++;
-                //             qx += 2;
-                //             dy --;
-                //             qy -= 2;
-                //         }
-                //     }
-                //     break;
             }
         }
     }
@@ -281,6 +208,10 @@
 
         shapeStartX = -1;
         shapeStartY = -1;
+    }
+
+    const eraseClicked = () => {
+        gridStore.set(grid.map(row => row.map(() => -1)));
     }
 </script>
 

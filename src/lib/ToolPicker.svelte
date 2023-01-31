@@ -5,8 +5,11 @@
     import FaRegSquare from 'svelte-icons/fa/FaRegSquare.svelte'
     import FaRegCircle from 'svelte-icons/fa/FaRegCircle.svelte'
     import FaEyeDropper from 'svelte-icons/fa/FaEyeDropper.svelte'
+    import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte'
 
-    import {tool} from '../stores'
+    import {grid, tool} from '../stores'
+    let clearPressed = false;
+    const CLEAR_TIMEOUT = 1000;
 
     const onload = (el) => {
         tool.subscribe(newTool => {
@@ -17,6 +20,19 @@
 
             document.getElementById(newTool).classList.add('active')
         })
+
+        const clearButton = document.getElementById('clear');
+
+        clearButton.onmousedown = () => {
+            clearPressed = true;
+            setTimeout(() => {
+                if (clearPressed) handleClear();
+            }, CLEAR_TIMEOUT);
+        }
+
+        clearButton.onmouseup = () => {
+            clearPressed = false;
+        }
     }
 
     const handleToolClick = (event) => {
@@ -26,6 +42,11 @@
             e = e.parentElement;
         }
         tool.set(e.id)
+    }
+
+    const handleClear = (_) => {
+        // clear grid
+        grid.set(Array.from({ length: 16 }, () => Array.from({ length: 16 }, () => -1)))
     }
 
 </script>
@@ -38,6 +59,7 @@
     <button id="rect" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaRegSquare /></div></button>
     <button id="ellipse" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaRegCircle /></div></button>
     <button id="eyedropper" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaEyeDropper /></div></button>
+    <button id="clear" class="toolButton"><div class="buttonIcon"><FaRegTrashAlt /></div></button>
 </div>
 
 <style>
