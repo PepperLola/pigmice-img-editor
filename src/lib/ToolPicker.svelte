@@ -26,7 +26,8 @@
         clearButton.onmousedown = () => {
             clearPressed = true;
             setTimeout(() => {
-                if (clearPressed) handleClear();
+                clearPressed = false;
+                handleClear();
             }, CLEAR_TIMEOUT);
         }
 
@@ -84,5 +85,62 @@
 
     .toolButton * {
         width: 16px;
+    }
+
+    #clear {
+        position: relative;
+    }
+
+    #clear:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        scale: 115%;
+        border-radius: 8px;
+        background: transparent;
+    }
+
+    #clear:active:before {
+        animation: rotateClearBackground 1s linear;
+    }
+
+    @keyframes rotateClearBackground {
+        0% {
+            background: transparent;
+        }
+        10% {
+            background: conic-gradient(red 0deg,  red calc(36deg*1), transparent calc(36deg*1));
+        }
+        20% {
+            background: conic-gradient(red 0deg,  red calc(36deg*2), transparent calc(36deg*2));
+        }
+        30% {
+            background: conic-gradient(red 0deg,  red calc(36deg*3), transparent calc(36deg*3));
+        }
+        40% {
+            background: conic-gradient(red 0deg,  red calc(36deg*4), transparent calc(36deg*4));
+        }
+        50% {
+            background: conic-gradient(red 0deg,  red calc(36deg*5), transparent calc(36deg*5));
+        }
+        60% {
+            background: conic-gradient(red 0deg,  red calc(36deg*6), transparent calc(36deg*6));
+        }
+        70% {
+            background: conic-gradient(red 0deg,  red calc(36deg*7), transparent calc(36deg*7));
+        }
+        80% {
+            background: conic-gradient(red 0deg,  red calc(36deg*8), transparent calc(36deg*8));
+        }
+        90% {
+            background: conic-gradient(red 0deg,  red calc(36deg*9), transparent calc(36deg*9));
+        }
+        100% {
+            background: conic-gradient(red 0deg,  red 359deg, transparent 360deg);
+        }
     }
 </style>
