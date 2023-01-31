@@ -10,6 +10,7 @@
     import {grid, tool} from '../stores'
     let clearPressed = false;
     const CLEAR_TIMEOUT = 1000;
+    let timeout = null;
 
     const onload = (el) => {
         tool.subscribe(newTool => {
@@ -25,14 +26,17 @@
 
         clearButton.onmousedown = () => {
             clearPressed = true;
-            setTimeout(() => {
-                clearPressed = false;
-                handleClear();
+            timeout = setTimeout(() => {
+                if (clearPressed) {
+                    handleClear();
+                    clearPressed = false;
+                }
             }, CLEAR_TIMEOUT);
         }
 
         clearButton.onmouseup = () => {
             clearPressed = false;
+            clearTimeout(timeout);
         }
     }
 
