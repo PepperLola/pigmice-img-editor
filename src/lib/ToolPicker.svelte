@@ -93,6 +93,11 @@
 
     #clear {
         position: relative;
+        cursor: pointer;
+    }
+
+    #clear:active {
+        cursor: wait;
     }
 
     #clear:before {

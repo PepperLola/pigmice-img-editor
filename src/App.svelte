@@ -1,5 +1,6 @@
 <script lang="ts">
-	import ColorDisplay from "./lib/ColorDisplay.svelte";
+	import ActionBar from "./lib/ActionBar.svelte";
+import ColorDisplay from "./lib/ColorDisplay.svelte";
 import ColorPicker from "./lib/ColorPicker.svelte";
   import Drawing from "./lib/Drawing.svelte";
 	import ToolPicker from "./lib/ToolPicker.svelte";
@@ -9,10 +10,12 @@ import ColorPicker from "./lib/ColorPicker.svelte";
 
 <main>
   <div id="mainView">
-  <Drawing />
-  <ColorPicker />
-  <br/>
-  <ToolPicker />
+    <ActionBar />
+    <br />
+    <Drawing />
+    <ColorPicker />
+    <br/>
+    <ToolPicker />
   </div>
   <ColorDisplay />
 </main>
