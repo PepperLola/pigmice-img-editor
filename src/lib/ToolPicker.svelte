@@ -60,7 +60,7 @@
     <button id="pencil" class="toolButton active" on:click={handleToolClick}><div class="buttonIcon"><FaPencilAlt /></div></button>
     <button id="eraser" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaEraser /></div></button>
     <button id="fill" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaFill /></div></button>
-    <button id="line" class="toolButton" on:click={handleToolClick}>Line</button>
+    <button id="line" class="toolButton" on:click={handleToolClick}>⟋</button>
     <button id="rect" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaRegSquare /></div></button>
     <button id="ellipse" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaRegCircle /></div></button>
     <button id="eyedropper" class="toolButton" on:click={handleToolClick}><div class="buttonIcon"><FaEyeDropper /></div></button>
