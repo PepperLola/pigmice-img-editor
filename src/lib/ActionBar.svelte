@@ -45,7 +45,7 @@
     const handleExport = (el) => {
         console.log('exporting')
         let name = prompt('Enter a name for the file');
-        let text = `public static final Image ${name} = new Image(new int[][] {\n`;
+        let text = `public static final Image ${name} = new Image(new byte[][] {\n`;
         for (let y = 0; y < grid.length; y++) {
             for (let x = 0; x < grid[y].length; x++) {
                 if (x == 0) {
