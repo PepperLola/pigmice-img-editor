@@ -42,10 +42,9 @@
         });
     }
 
-    const handleExport = (el) => {
-        console.log('exporting')
-        let name = prompt('Enter a name for the file');
+    const exportImage = (name) => {
         let text = `public static final Image ${name} = new Image(new byte[][] {\n`;
+        
         for (let y = 0; y < grid.length; y++) {
             for (let x = 0; x < grid[y].length; x++) {
                 if (x == 0) {
@@ -65,7 +64,49 @@
             }
         }
         
-        copyTextToClipboard(text);
+        return text;
+    }
+
+    const exportAnimation = (name) => {
+        let text = `public static final Animation ${name} = new Animation(Arrays.asList(\n`;
+
+        for (let i = 0; i < grid.length; i++) {
+            let image = grid[i];
+            text += `new Image(new byte[][] {\n`;
+            for (let y = 0; y < image.length; y++) {
+                for (let x = 0; x < image[y].length; x++) {
+                    if (x == 0) {
+                        text += '{';
+                    }
+                    text += image[y][x] == -1 ? '0' : image[y][x];
+                    if (x == image[y].length - 1) {
+                        text += '}';
+                    } else {
+                        text += ', ';
+                    }
+                }
+                if (y == image.length - 1) {
+                    text += '\n})\n';
+                    if (i < grid.length - 1)
+                        text += ',';
+                } else {
+                    text += ',\n';
+                }
+            }
+        }
+
+        text += "));";
+        
+        return text;
+    }
+
+    const handleExport = (el) => {
+        let name = prompt(`Enter a name for the ${grid.length > 1 ? 'animation' : 'image'}:`);
+
+        if (grid.length > 1)
+            copyTextToClipboard(exportAnimation(name));
+        else
+            copyTextToClipboard(exportImage(name));
     }
 </script>
 

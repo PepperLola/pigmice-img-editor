@@ -66,6 +66,7 @@ button:focus,
 button:focus-visible,
 button.active {
 	outline: 4px auto -webkit-focus-ring-color;
+	outline: 4px auto Highlight;
 }
 
 @media (prefers-color-scheme: light) {

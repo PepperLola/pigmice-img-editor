@@ -1,8 +1,9 @@
 import { writable } from 'svelte/store';
 
-export const grid = writable(
-	Array.from({ length: 16 }, () => Array.from({ length: 16 }, () => -1))
-);
+export const grid = writable([
+	Array.from({ length: 16 }, () => Array.from({ length: 16 }, () => -1)),
+]);
+export const currentGrid = writable(0);
 
 let numColors = 15;
 

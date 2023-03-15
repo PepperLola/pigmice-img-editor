@@ -3,6 +3,7 @@
 import ColorDisplay from "./lib/ColorDisplay.svelte";
 import ColorPicker from "./lib/ColorPicker.svelte";
   import Drawing from "./lib/Drawing.svelte";
+	import FramesBar from "./lib/FramesBar.svelte";
 	import ToolPicker from "./lib/ToolPicker.svelte";
 </script>
 
@@ -11,6 +12,8 @@ import ColorPicker from "./lib/ColorPicker.svelte";
 <main>
   <div id="mainView">
     <ActionBar />
+    <br>
+    <FramesBar />
     <br />
     <Drawing />
     <ColorPicker />

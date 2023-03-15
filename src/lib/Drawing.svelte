@@ -1,16 +1,21 @@
 <script>
     import { Canvas, Layer, t } from 'svelte-canvas';
-    import {colors, grid as gridStore, primaryColor as primaryColorStore, secondaryColor as secondaryColorStore, tool as toolStore} from '../stores'
+    import {colors, grid as gridStore, currentGrid as currentGridStore, primaryColor as primaryColorStore, secondaryColor as secondaryColorStore, tool as toolStore} from '../stores'
 
-    let grid = [];
+    let grid = [[]];
+    let currentGrid = 0;
     let primaryColor = 0;
     let secondaryColor = 15;
     let tool = 'pencil';
     let lastX = -1;
     let lastY = -1;
-    let gridBuffer = [];
+    let gridBuffer = [[]];
     let shapeStartX = -1;
     let shapeStartY = -1;
+
+    currentGridStore.subscribe(g => {
+        currentGrid = g;
+    })
 
     primaryColorStore.subscribe(color => {
         primaryColor = color;
@@ -30,9 +35,9 @@
     })
 
     $: render = ({ context, width, height }) => {
-        for (let y = 0; y < gridBuffer.length; y++) {
-            for (let x = 0; x < gridBuffer[0].length; x++) {
-                let color = gridBuffer[y][x];
+        for (let y = 0; y < gridBuffer[currentGrid].length; y++) {
+            for (let x = 0; x < gridBuffer[currentGrid][0].length; x++) {
+                let color = gridBuffer[currentGrid][y][x];
                 if (color < 0) {
                     // render dithered pattern
                     if ((x % 2 == 0 && y % 2 == 0) || (x % 2 == 1 && y % 2 == 1)) {
@@ -57,13 +62,13 @@
         gridStore.update(grid => {
             switch (tool) {
                 case 'pencil':
-                    grid[y][x] = e.shiftKey ? secondaryColor : primaryColor;
+                    grid[currentGrid][y][x] = e.shiftKey ? secondaryColor : primaryColor;
                     break;
                 case 'eraser':
-                    grid[y][x] = -1;
+                    grid[currentGrid][y][x] = -1;
                     break;
                 case 'fill':
-                    let color = grid[y][x];
+                    let color = grid[currentGrid][y][x];
                     let newColor = e.shiftKey ? secondaryColor : primaryColor;
                     if (color == newColor) {
                         break;
@@ -71,18 +76,18 @@
                     let queue = [[x, y]];
                     while (queue.length > 0) {
                         let [x, y] = queue.shift();
-                        if (grid[y][x] == color) {
-                            grid[y][x] = newColor;
+                        if (grid[currentGrid][y][x] == color) {
+                            grid[currentGrid][y][x] = newColor;
                             if (x > 0) {
                                 queue.push([x - 1, y]);
                             }
-                            if (x < grid[0].length - 1) {
+                            if (x < grid[currentGrid][0].length - 1) {
                                 queue.push([x + 1, y]);
                             }
                             if (y > 0) {
                                 queue.push([x, y - 1]);
                             }
-                            if (y < grid.length - 1) {
+                            if (y < grid[currentGrid].length - 1) {
                                 queue.push([x, y + 1]);
                             }
                         }
@@ -90,9 +95,9 @@
                     break;
                 case 'eyedropper':
                     if (e.shiftKey) {
-                        secondaryColorStore.set(grid[y][x]);
+                        secondaryColorStore.set(grid[currentGrid][y][x]);
                     } else {
-                        primaryColorStore.set(grid[y][x]);
+                        primaryColorStore.set(grid[currentGrid][y][x]);
                     }
                     break;
                 default:
@@ -119,19 +124,19 @@
                 case 'pencil':
                     if (e.shiftKey) {
                         gridStore.update(grid => {
-                            grid[y][x] = secondaryColor;
+                            grid[currentGrid][y][x] = secondaryColor;
                             return grid;
                         })
                     } else {
                         gridStore.update(grid => {
-                            grid[y][x] = primaryColor;
+                            grid[currentGrid][y][x] = primaryColor;
                             return grid;
                         })
                     }
                     break;
                 case 'eraser':
                     gridStore.update(grid => {
-                        grid[y][x] = -1;
+                        grid[currentGrid][y][x] = -1;
                         return grid;
                     })
                     break;
@@ -143,7 +148,7 @@
                     for (let i = 0; i <= steps; i++) {
                         let x = Math.round(shapeStartX + dxLine * i / steps);
                         let y = Math.round(shapeStartY + dyLine * i / steps);
-                        gridBuffer[y][x] = e.shiftKey ? secondaryColor : primaryColor;
+                        gridBuffer[currentGrid][y][x] = e.shiftKey ? secondaryColor : primaryColor;
                     }
 
                     break;
@@ -154,12 +159,12 @@
                     let y1 = Math.min(y, shapeStartY);
                     let y2 = Math.max(y, shapeStartY);
                     for (let i = x1; i <= x2; i++) {
-                        gridBuffer[y1][i] = e.shiftKey ? secondaryColor : primaryColor;
-                        gridBuffer[y2][i] = e.shiftKey ? secondaryColor : primaryColor;
+                        gridBuffer[currentGrid][y1][i] = e.shiftKey ? secondaryColor : primaryColor;
+                        gridBuffer[currentGrid][y2][i] = e.shiftKey ? secondaryColor : primaryColor;
                     }
                     for (let i = y1; i <= y2; i++) {
-                        gridBuffer[i][x1] = e.shiftKey ? secondaryColor : primaryColor;
-                        gridBuffer[i][x2] = e.shiftKey ? secondaryColor : primaryColor;
+                        gridBuffer[currentGrid][i][x1] = e.shiftKey ? secondaryColor : primaryColor;
+                        gridBuffer[currentGrid][i][x2] = e.shiftKey ? secondaryColor : primaryColor;
                     }
                     break;
                 case 'ellipse':
@@ -173,7 +178,7 @@
                     for (let i = 0.1; i <= 2 * Math.PI; i += 0.1) {
                         let x = Math.floor(cx + rx * Math.cos(i));
                         let y = Math.floor(cy + ry * Math.sin(i));
-                        gridBuffer[y][x] = c;
+                        gridBuffer[currentGrid][y][x] = c;
                     }
                     break;
             }
@@ -211,7 +216,7 @@
     }
 
     const eraseClicked = () => {
-        gridStore.set(grid.map(row => row.map(() => -1)));
+        gridStore.set(grid[currentGrid].map(row => row.map(() => -1)));
     }
 </script>
 

@@ -7,7 +7,7 @@
     import FaEyeDropper from 'svelte-icons/fa/FaEyeDropper.svelte'
     import FaRegTrashAlt from 'svelte-icons/fa/FaRegTrashAlt.svelte'
 
-    import {grid, tool} from '../stores'
+    import {grid, tool, currentGrid} from '../stores'
     let clearPressed = false;
     const CLEAR_TIMEOUT = 1000;
     let timeout = null;
@@ -51,7 +51,8 @@
 
     const handleClear = (_) => {
         // clear grid
-        grid.set(Array.from({ length: 16 }, () => Array.from({ length: 16 }, () => -1)))
+        grid.set([Array.from({ length: 16 }, () => Array.from({ length: 16 }, () => -1))])
+        currentGrid.set(0);
     }
 
 </script>
@@ -84,7 +85,9 @@
     }
 
     button.active:not(:hover) {
-        outline: 1px solid #4169E1;
+        /* outline: 1px solid #4169E1; */
+        outline: 1px solid Highlight;
+        outline: 1px solid -webkit-focus-ring-color;
     }
 
     .toolButton * {
