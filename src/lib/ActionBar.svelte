@@ -43,30 +43,34 @@
     }
 
     const exportImage = (name) => {
-        let text = `public static final Image ${name} = new Image(new byte[][] {\n`;
+        return `public static final Image ${name} = ${exportImageInstance()};`;   
+    }
+
+    const exportImageInstance = (i = 0) => {
+        let text = `new Image(new byte[][] {\n`;
         
-        for (let y = 0; y < grid[0].length; y++) {
-            for (let x = 0; x < grid[0][y].length; x += 2) {
+        for (let y = 0; y < grid[i].length; y++) {
+            for (let x = 0; x < grid[i][y].length; x += 2) {
                 if (x == 0) {
                     text += '{';
                 }
-                let color1 = Math.max(0, grid[0][y][x]);
-                let color2 = Math.max(0, grid[0][y][x + 1]);
+                let color1 = Math.max(0, grid[i][y][x]);
+                let color2 = Math.max(0, grid[i][y][x + 1]);
 
                 if (color1 == 0 && color2 == 0) {
                     text += "0";
                 } else {
                     text += "(byte)" + ((color1 << 4) | color2).toString();
                 }
-                if (x >= grid[0][y].length - 2) {
+                if (x >= grid[i][y].length - 2) {
                     text += '}';
                 } else {
                     text += ', ';
                 }
             }
             
-            if (y == grid[0].length - 1) {
-                text += '\n});';
+            if (y == grid[i].length - 1) {
+                text += '\n})';
             } else {
                 text += ',\n';
             }
@@ -79,28 +83,7 @@
         let text = `public static final Animation ${name} = new Animation(Arrays.asList(\n`;
 
         for (let i = 0; i < grid.length; i++) {
-            let image = grid[i];
-            text += `new Image(new byte[][] {\n`;
-            for (let y = 0; y < image.length; y++) {
-                for (let x = 0; x < image[y].length; x++) {
-                    if (x == 0) {
-                        text += '{';
-                    }
-                    text += image[y][x] == -1 ? '0' : image[y][x];
-                    if (x == image[y].length - 1) {
-                        text += '}';
-                    } else {
-                        text += ', ';
-                    }
-                }
-                if (y == image.length - 1) {
-                    text += '\n})\n';
-                    if (i < grid.length - 1)
-                        text += ',';
-                } else {
-                    text += ',\n';
-                }
-            }
+            text += exportImageInstance(i);
         }
 
         text += "));";
@@ -109,7 +92,7 @@
     }
 
     const handleExport = (el) => {
-        let name = prompt(`Enter a name for the ${grid.length > 1 ? 'animation' : 'image'}:`);
+        let name = prompt(`Enter a name for the ${grid.length > 1 ? 'animation' : 'image'}:`).replaceAll(' ', '_').toUpperCase();
 
         if (grid.length > 1)
             copyTextToClipboard(exportAnimation(name));
