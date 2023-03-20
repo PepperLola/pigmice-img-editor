@@ -46,12 +46,19 @@
         let text = `public static final Image ${name} = new Image(new byte[][] {\n`;
         
         for (let y = 0; y < grid[0].length; y++) {
-            for (let x = 0; x < grid[0][y].length; x++) {
+            for (let x = 0; x < grid[0][y].length; x += 2) {
                 if (x == 0) {
                     text += '{';
                 }
-                text += grid[0][y][x] == -1 ? '0' : grid[0][y][x];
-                if (x == grid[0][y].length - 1) {
+                let color1 = Math.max(0, grid[0][y][x]);
+                let color2 = Math.max(0, grid[0][y][x + 1]);
+
+                if (color1 == 0 && color2 == 0) {
+                    text += "0";
+                } else {
+                    text += "(byte)" + ((color1 << 4) | color2).toString();
+                }
+                if (x == grid[0][y].length - 2) {
                     text += '}';
                 } else {
                     text += ', ';
@@ -64,6 +71,7 @@
                 text += ',\n';
             }
         }
+
         return text;
     }
 

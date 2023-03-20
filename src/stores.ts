@@ -9,7 +9,7 @@ let numColors = 15;
 
 export const colors = ['rgb(0, 0, 0)', 'rgb(255, 255, 255)'].concat(
 	[...Array(numColors - 1)].map(
-		(_, i) => `hsl(${(i * 360) / (numColors - 1)}, 100%, 50%)`
+		(_, i) => `hsl(${(i * 360) / (numColors - 1)}, 80%, 50%)`
 	)
 );
 
