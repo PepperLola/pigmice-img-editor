@@ -28,6 +28,39 @@
         currentGridStore.set(frame);
     }
 
+    const handleKeypress = (event) => {
+        console.log(event);
+        switch (event.key) {
+            case "d":
+                let g = grid[currentGrid];
+                gridStore.set(
+                    grid.slice(0, currentGrid + 1).concat([structuredClone(g)]).concat(gridBuffer.slice(currentGrid + 1))
+                );
+                currentGridStore.set(currentGrid + 1);
+                break;
+            case "Backspace":
+            case "Delete":
+                if (confirm("Are you sure you want to delete?")) {
+                    if (grid.length > 1) {
+                        grid.splice(currentGrid, 1);
+                        gridStore.set(grid);
+                        currentGridStore.set(currentGrid - 1);
+                    }
+                }
+                break;
+            case "ArrowLeft":
+                if (currentGrid > 0) {
+                    currentGridStore.set(currentGrid - 1);
+                }
+                break;
+            case "ArrowRight":
+                if (currentGrid < grid.length - 1) {
+                    currentGridStore.set(currentGrid + 1);
+                }
+                break;
+        }
+    }
+
     $: render = ({ context, width, height }) => {
         let currentFrame = parseInt(context.canvas.classList[0].split('-')[1]);
         for (let y = 0; y < gridBuffer[currentFrame].length; y++) {
@@ -63,6 +96,8 @@
         <button on:click={addFrame}>+</button>
     </div>
 </main>
+
+<svelte:window on:keydown={handleKeypress} />
 
 <style>
     #wrapper {

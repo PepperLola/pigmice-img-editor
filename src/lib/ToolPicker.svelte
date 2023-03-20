@@ -84,7 +84,7 @@
         align-items: center;
     }
 
-    button.active:not(:hover) {
+    button.active:not(:hover):not(#clear) {
         /* outline: 1px solid #4169E1; */
         outline: 1px solid Highlight;
         outline: 1px solid -webkit-focus-ring-color;
@@ -97,6 +97,7 @@
     #clear {
         position: relative;
         cursor: pointer;
+        outline: none;
     }
 
     #clear:active {

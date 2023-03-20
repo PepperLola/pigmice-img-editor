@@ -1,7 +1,7 @@
 <script>
     import {grid as gridStore} from '../stores';
 
-    let grid = [];
+    let grid = [[]];
 
     gridStore.subscribe(g => {
         grid = g;
@@ -45,25 +45,25 @@
     const exportImage = (name) => {
         let text = `public static final Image ${name} = new Image(new byte[][] {\n`;
         
-        for (let y = 0; y < grid.length; y++) {
-            for (let x = 0; x < grid[y].length; x++) {
+        for (let y = 0; y < grid[0].length; y++) {
+            for (let x = 0; x < grid[0][y].length; x++) {
                 if (x == 0) {
                     text += '{';
                 }
-                text += grid[y][x] == -1 ? '0' : grid[y][x];
-                if (x == grid[y].length - 1) {
+                text += grid[0][y][x] == -1 ? '0' : grid[0][y][x];
+                if (x == grid[0][y].length - 1) {
                     text += '}';
                 } else {
                     text += ', ';
                 }
             }
-            if (y == grid.length - 1) {
+            
+            if (y == grid[0].length - 1) {
                 text += '\n});';
             } else {
                 text += ',\n';
             }
         }
-        
         return text;
     }
 

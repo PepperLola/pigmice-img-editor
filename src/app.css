@@ -64,7 +64,7 @@ button:hover {
 }
 button:focus,
 button:focus-visible,
-button.active {
+button.active:not(#clear) {
 	outline: 4px auto -webkit-focus-ring-color;
 	outline: 4px auto Highlight;
 }
@@ -74,7 +74,7 @@ button.active {
 		color: #213547;
 		background-color: #ffffff;
 	}
-	a:hover {
+	a:hover:not(#clear) {
 		color: #747bff;
 	}
 	button {
