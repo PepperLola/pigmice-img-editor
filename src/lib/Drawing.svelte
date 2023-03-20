@@ -1,6 +1,10 @@
 <script>
+    import {Base64} from '../util'
     import { Canvas, Layer, t } from 'svelte-canvas';
     import {colors, grid as gridStore, currentGrid as currentGridStore, primaryColor as primaryColorStore, secondaryColor as secondaryColorStore, tool as toolStore} from '../stores'
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const loadedGrid = urlParams.has('grid') ? JSON.parse(atob(urlParams.get('grid'))) : [];
 
     let grid = [[]];
     let currentGrid = 0;
@@ -12,6 +16,29 @@
     let gridBuffer = [[]];
     let shapeStartX = -1;
     let shapeStartY = -1;
+
+    if (loadedGrid.length > 0) {
+        if (loadedGrid[0][0].length < 15) {
+            for (let i = 0; i < loadedGrid.length; i++) {
+                for (let y = 0; y < loadedGrid[i].length; y++) {
+                    for (let x = 0; x < loadedGrid[i][y].length; x++) {
+                        let color = loadedGrid[i][y][x];
+                        if (color <= 0) {
+                            loadedGrid[i][y].splice(x + 1, 0, 0);
+                            x += 1;
+                            continue;
+                        }
+                        let color1 = color >> 4;
+                        let color2 = color & 0xF;
+                        loadedGrid[i][y][x] = color1;
+                        loadedGrid[i][y].splice(x + 1, 0, color2);
+                        x += 1;
+                    }
+                }
+            }
+        }
+        gridStore.set(loadedGrid);
+    }
 
     currentGridStore.subscribe(g => {
         currentGrid = g;
@@ -183,6 +210,8 @@
                     break;
             }
         }
+
+        updateUrlParam();
     }
 
     const mouseDown = (e) => {
@@ -213,6 +242,13 @@
 
         shapeStartX = -1;
         shapeStartY = -1;
+
+        updateUrlParam();
+    }
+
+    const updateUrlParam = () => {
+        urlParams.set('grid', btoa(JSON.stringify(grid)));
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
     }
 
     const eraseClicked = () => {

@@ -58,7 +58,7 @@
                 } else {
                     text += "(byte)" + ((color1 << 4) | color2).toString();
                 }
-                if (x == grid[0][y].length - 2) {
+                if (x >= grid[0][y].length - 2) {
                     text += '}';
                 } else {
                     text += ', ';
