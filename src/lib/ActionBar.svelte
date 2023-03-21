@@ -49,27 +49,20 @@
     const exportImageInstance = (i = 0) => {
         let text = `new Image(new byte[][] {\n`;
         
-        for (let y = 0; y < grid[i].length; y++) {
-            for (let x = 0; x < grid[i][y].length; x += 2) {
+                for (let y = 0; y < grid[0].length; y++) {
+            for (let x = 0; x < grid[0][y].length; x++) {
                 if (x == 0) {
                     text += '{';
                 }
-                let color1 = Math.max(0, grid[i][y][x]);
-                let color2 = Math.max(0, grid[i][y][x + 1]);
-
-                if (color1 == 0 && color2 == 0) {
-                    text += "0";
-                } else {
-                    text += "(byte)" + ((color1 << 4) | color2).toString();
-                }
-                if (x >= grid[i][y].length - 2) {
+                text += grid[0][y][x] == -1 ? '0' : grid[0][y][x];
+                if (x == grid[0][y].length - 1) {
                     text += '}';
                 } else {
                     text += ', ';
                 }
             }
             
-            if (y == grid[i].length - 1) {
+            if (y == grid[0].length - 1) {
                 text += '\n})';
             } else {
                 text += ',\n';
@@ -84,6 +77,10 @@
 
         for (let i = 0; i < grid.length; i++) {
             text += exportImageInstance(i);
+            if (i < grid.length - 1)
+                text += ',\n';
+            else
+                text += '\n';
         }
 
         text += "));";
